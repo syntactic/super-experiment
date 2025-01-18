@@ -98,7 +98,7 @@ const block = async (trial_sequence, regen = 0, config = null, isLoop = false, i
 
     const timeStart = performance.now();
 
-    const timeline = new Timeline(trials, regen, _config['movKeys'], _config['orKeys'], timeStart, isLoop, isFeedback);
+    const timeline = new Timeline(trials, regen, _config['movKeys'], _config['orKeys'], timeStart, isLoop, isFeedback, _config);
 
     let previousTime = performance.now();
     let deltaTime = 0;
@@ -270,4 +270,4 @@ const _stitch = (trial_sequence, data) => {
 }
 
 
-export {block, endBlock, Experiment}
+export {block, endBlock, Experiment};

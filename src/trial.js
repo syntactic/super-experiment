@@ -1,3 +1,4 @@
+import { validateResponse } from './responseValidation.js';
 class Interval {
     constructor(name, start, duration, stim) {
         this.name = name;
@@ -156,9 +157,8 @@ class FeatureTimeline {
 
 
 }
-
 class Timeline {
-    constructor(trials, regenerationTime = 0, keyMappingMov = 'fj', keyMappingOr = 'dk', startTime, isLoop = false, isFeedback=true) {
+    constructor(trials, regenerationTime = 0, keyMappingMov = 'fj', keyMappingOr = 'dk', startTime, isLoop = false, isFeedback=true, config) {
         this.active = true
         this.cue1Timeline = new FeatureTimeline()
         this.cue2Timeline = new FeatureTimeline()
@@ -168,6 +168,7 @@ class Timeline {
         this.or2Timeline = new FeatureTimeline()
         this.go1Timeline = new FeatureTimeline()
         this.go2Timeline = new FeatureTimeline()
+        this.config = config
         this.keyMappingMov = keyMappingMov
         this.keyMappingOr = keyMappingOr
         this.startTime = startTime
@@ -198,6 +199,7 @@ class Timeline {
         let go1Active = this.go1Timeline.getCurrentFeatures(timestamp)
         let go2Active = this.go2Timeline.getCurrentFeatures(timestamp)
         let isCorrect = false
+        
         if (go1Active) {
             const go1Event = this.go1Timeline.data[this.go1Timeline.data.length - 1]
             if (go1Event) {
@@ -210,21 +212,23 @@ class Timeline {
                 let mov2 = active(this.mov2Timeline, go1start, 'stim')
                 let or1 = active(this.or1Timeline, go1start, 'stim')
                 let or2 = active(this.or2Timeline, go1start, 'stim')
+                
                 if (cue1 === 'cueMov') {
                     if (mov1 !== false) {
-                        isCorrect = isCorrect || (mov1 === 180 && key === this.keyMappingMov[0]) || (mov1 === 0 && key === this.keyMappingMov[1])
+                        isCorrect = isCorrect || validateResponse(mov1, key, this.config.movementKeyMap)
                     }
                     if (mov2 !== false) {
-                        isCorrect = isCorrect || ((mov2 === 180 && key === this.keyMappingMov[0]) || (mov2 === 0 && key === this.keyMappingMov[1]))
+                        isCorrect = isCorrect || validateResponse(mov2, key, this.config.movementKeyMap)
                     }
                 } else if (cue1 === 'cueOr') {
                     if (or1 !== false) {
-                        isCorrect = isCorrect || ((or1 === 180 && key === this.keyMappingOr[0]) || (or1 === 0 && key === this.keyMappingOr[1]))
+                        isCorrect = isCorrect || validateResponse(or1, key, this.config.orientationKeyMap)
                     }
                     if (or2 !== false) {
-                        isCorrect = isCorrect || ((or2 === 180 && key === this.keyMappingOr[0]) || (or2 === 0 && key === this.keyMappingOr[1]))
+                        isCorrect = isCorrect || validateResponse(or2, key, this.config.orientationKeyMap)
                     }
                 }
+                
                 if (isCorrect && this.isFeedback) {
                     this.cue1Timeline.setCurrentFeatureInactive(timestamp)
                     this.go1Timeline.setCurrentFeatureInactive(timestamp)
@@ -232,6 +236,7 @@ class Timeline {
                 }
             }
         }
+        
         if (!isCorrect && go2Active['go2']) {
             const go2Event = this.go2Timeline.data[this.go2Timeline.data.length - 1]
             if (go2Event) {
@@ -244,21 +249,22 @@ class Timeline {
                     let mov1 = active(this.mov1Timeline, go2start, 'stim')
                     let mov2 = active(this.mov2Timeline, go2start, 'stim')
                     if (mov1 !== false) {
-                        isCorrect = isCorrect || ((mov1 === 180 && key === this.keyMappingMov[0]) || (mov1 === 0 && key === this.keyMappingMov[1]))
+                        isCorrect = isCorrect || validateResponse(mov1, key, this.config.movementKeyMap)
                     }
                     if (mov2 !== false) {
-                        isCorrect = isCorrect || ((mov2 === 180 && key === this.keyMappingMov[0]) || (mov2 === 0 && key === this.keyMappingMov[1]))
+                        isCorrect = isCorrect || validateResponse(mov2, key, this.config.movementKeyMap)
                     }
                 } else if (cue2 === 'cueOr') {
                     let or1 = active(this.or1Timeline, go2start, 'stim')
                     let or2 = active(this.or2Timeline, go2start, 'stim')
                     if (or1 !== false) {
-                        isCorrect = isCorrect || ((or1 === 180 && key === this.keyMappingOr[0]) || (or1 === 0 && key === this.keyMappingOr[1]))
+                        isCorrect = isCorrect || validateResponse(or1, key, this.config.orientationKeyMap)
                     }
                     if (or2 !== false) {
-                        isCorrect = isCorrect || ((or2 === 180 && key === this.keyMappingOr[0]) || (or2 === 0 && key === this.keyMappingOr[1]))
+                        isCorrect = isCorrect || validateResponse(or2, key, this.config.orientationKeyMap)
                     }
                 }
+                
                 if (isCorrect && this.isFeedback) {
                     this.cue2Timeline.setCurrentFeatureInactive(timestamp)
                     this.go2Timeline.setCurrentFeatureInactive(timestamp)
@@ -266,13 +272,14 @@ class Timeline {
                 }
             }
         }
+        
         if (!isCorrect && this.isFeedback) {
             giveFeedback('false')
         }
+        
         this.eventData['keyPresses'].push({
             eventType: 'keypress', key: event.key, time: event.timeStamp - this.startTime, isCorrect: isCorrect
         })
-
     }
 
     getData() {
@@ -392,6 +399,5 @@ const giveFeedback = (type) => {
         canvas.style.background = '#000'
     }, 100)
 }
-
 
 export {Interval, Trial, Timeline}
