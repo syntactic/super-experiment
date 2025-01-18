@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        body {
+            background: black;
+        }
+    </style>
+    <script type="module">
+        import instructions from "./instructions.js";
+        import instructionsTest from "./instructionsTest.js";
+        import {block} from "./index.js";
+        import defaultConfig from "./src/defaultConfig.js";
+        import {createTrialSequence, loadImage} from "./util.js";
+
+        const img = await loadImage('res/fish_2.png')
+        const imgDist = await loadImage('res/fish_forward.png')
+        let config = {
+            'img': img,
+            'imgDist': imgDist,
+            'imgFramesX': 4,
+            'imgFramesY': 2,
+            'imgDistFramesX': 4,
+            'imgDistFramesY': 2,
+            'objName': 'sidewards facing fish',
+            'distName': 'forwards facing fish',
+            'allName': 'fish',
+            'isDemonstration': false
+        }
+        await instructions()
+        // let config_2 = {
+        //     'img': img,
+        //     'imgDist': imgDist,
+        //     'imgFramesX': 4,
+        //     'imgFramesY': 2,
+        //     'imgDistFramesX': 4,
+        //     'imgDistFramesY': 2,
+        //     'objName': ' facing fish',
+        //     'distName': ' facing fish',
+        //     'allName': 'fish',
+        //     'isDemonstration': true
+        // }
+        // let _config = defaultConfig(config)
+        // let _config_2 = defaultConfig(config_2)
+        // const data = await instructionsTest(_config_2,0,1)
+        let div_1 = document.createElement('div')
+        document.body.appendChild(div_1)
+        div_1.style.backgroundColor = 'red'
+        div_1.style.width = '10px'
+        div_1.style.height= '10px'
+        let div_2 = document.createElement('div')
+        document.body.appendChild(div_2)
+        div_2.style.position = 'absolute'
+        div_2.style.right = '30vw'
+        div_2.style.backgroundColor = 'blue'
+        div_2.style.width = '10px'
+        div_2.style.height= '10px'
+        let max_time = 5000
+        let min_time = 1000
+        let multiplier = 2
+        const options = {
+            start_go_1: [0],
+            start_1: [0],
+            start_go_2: [0],
+            start_2: [0],
+            dur_2: [Math.random()*max_time + min_time],
+            dur_1: [Math.random()*max_time + min_time],
+            dur_go_1: [Math.random()*max_time + min_time],
+            dur_go_2: [Math.random()*max_time + min_time],
+            start_mov_1: [0],
+            dur_mov_1: [Math.random()*max_time + min_time],
+            start_mov_2: [0],
+            dur_mov_2: [0],
+            start_or_1: [0],
+            dur_or_1: [Math.random()*max_time + min_time],
+            start_or_2: [0],
+            dur_or_2: [0]
+        }
+        const seq = createTrialSequence(10, options)
+        const seq_2 = createTrialSequence(10, options)
+        const data = block(seq, 0, config, false, true)
+        // const data_2 = block(seq_2, 0, config, false,true, '2_2', div_2)
+        // let max_time = 5000
+        // let min_time = 1000
+        // let multiplier = 2
+        // max_time *= multiplier
+        // min_time *= multiplier
+        // const options = {
+        //     start_go_1: [0],
+        //     start_1: [0],
+        //     start_go_2: [0],
+        //     start_2: [0],
+        //     dur_2: [Math.random()*max_time + min_time],
+        //     dur_1: [Math.random()*max_time + min_time],
+        //     dur_go_1: [Math.random()*max_time + min_time],
+        //     dur_go_2: [Math.random()*max_time + min_time],
+        //     start_mov_1: [0],
+        //     dur_mov_1: [Math.random()*max_time + min_time],
+        //     start_mov_2: [0],
+        //     dur_mov_2: [0],
+        //     start_or_1: [0],
+        //     dur_or_1: [Math.random()*max_time + min_time],
+        //     start_or_2: [0],
+        //     dur_or_2: [0]
+        //
+        // }
+        // const seq = createTrialSequence(10, options)
+        // const data = await block(seq, 0 , config)
+
+    </script>
+</head>
+<body>
+
+</body>
+</html>

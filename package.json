@@ -1,0 +1,20 @@
+{
+  "name": "super-experiment",
+  "version": "0.3.5",
+  "description": "a variety of different cognitive tasks in a single paradigm",
+  "main": "index.js",
+  "browser": "dist/bundle.js",
+  "scripts": {
+    "docs": "jsdoc -c jsdocs.config.json && cd ./docs/ && hugo -t exampleTheme",
+    "build": "webpack --mode production"
+  },
+  "author": "Younes Strittmatter",
+  "license": "MIT",
+  "devDependencies": {
+    "@babel/core": "^7.23.9",
+    "babel-loader": "^9.1.3",
+    "jsdoc": "^4.0.2",
+    "webpack": "^5.90.2",
+    "webpack-cli": "^5.1.4"
+  }
+}
