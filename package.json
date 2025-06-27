@@ -1,12 +1,13 @@
 {
   "name": "super-experiment",
-  "version": "0.3.5",
+  "version": "0.3.5-timothy-ho-thesis-fork",
   "description": "a variety of different cognitive tasks in a single paradigm",
   "main": "index.js",
   "browser": "dist/bundle.js",
   "scripts": {
     "docs": "jsdoc -c jsdocs.config.json && cd ./docs/ && hugo -t exampleTheme",
-    "build": "webpack --mode production"
+    "build": "webpack --mode production",
+    "prepare": "npm run build"
   },
   "author": "Younes Strittmatter",
   "license": "MIT",
